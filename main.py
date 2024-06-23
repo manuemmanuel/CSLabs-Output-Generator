@@ -4,3 +4,6 @@ def generate_screenshot:
     height = 600
     background_color = (58, 12, 43)
     text_color = (255, 255, 255)
+    username_color = (63, 116, 98)
+    symbol_color = (55, 59, 105)
+    
