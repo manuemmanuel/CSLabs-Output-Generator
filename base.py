@@ -1,7 +1,6 @@
 from PIL import Image, ImageDraw, ImageFont
 
 def generate_screenshot(username, hostname, folder, command, output, file_path):
-    # Terminal dimensions
     width, height = 800, 600
     background_color = (58, 12, 43)
     text_color = (255, 255, 255)
