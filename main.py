@@ -9,3 +9,6 @@ def generate_screenshot:
     font_path = "fonts/UbuntuMono-R.ttf"
     bold_font_path = "fonts/UbuntuMono-B.ttf"
     font_size = 20
+
+    image = Image.new("RGB", (width, height), background_color)
+    draw = ImageDraw.Draw(image)
