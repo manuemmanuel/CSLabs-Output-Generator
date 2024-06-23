@@ -38,4 +38,13 @@ def generate_screenshot(username, hostname, folder, command, output, file_path):
 
     image.save(file_path)
     print(f"Screemshot saved to {file_path}") 
+
+username = "csea2"
+hostname = "sjcet-H81M-DS2"
+folder = "~/Documents"
+command = "echo 'Hello, World!'"
+output = "Hello World!"
+file_path = "terminal_screenshot.png"
+
+generate_screenshot(username, hostname, folder, command, output, file_path)
     
