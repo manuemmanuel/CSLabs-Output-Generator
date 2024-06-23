@@ -15,4 +15,5 @@ def generate_screenshot:
 
     font = ImageFont.truetype(font_path, font_size)
     bold_font = ImageFont.truetype(bold_font_path, font_size)
-    
+
+    prompt = f"{username}@{hostname}:{folder}$ {command}"
