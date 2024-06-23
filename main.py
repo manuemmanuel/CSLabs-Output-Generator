@@ -30,4 +30,10 @@ def generate_screenshot(username, hostname, folder, command, output, file_path):
     for text, color, font_type in prompt_parts:
         draw.text((x,y), text, font=font_type, fill=color)
         x += draw.textbbox((0, 0), text, font=font_type)[2]
+
+    y += font_size + 4
+    for line in output.split('\n'):
+        draw.text((20, y), line, font=font, fill=text_color)
+        y += font_size + 4
+         
     
