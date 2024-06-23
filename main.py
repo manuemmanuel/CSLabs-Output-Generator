@@ -17,3 +17,11 @@ def generate_screenshot(username, hostname, folder, command, output, file_path):
     bold_font = ImageFont.truetype(bold_font_path, font_size)
 
     prompt = f"{username}@{hostname}:{folder}$ {command}"
+    prompt_parts = [
+        (f"{username}@{hostname}", username_color, bold_font),
+        (":", text_color, font),
+        (folder, symbol_color, font),
+        ("$", text_color, font),
+        (f"{command}", text_color, font)
+
+    ]
