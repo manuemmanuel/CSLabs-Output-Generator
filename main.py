@@ -35,5 +35,7 @@ def generate_screenshot(username, hostname, folder, command, output, file_path):
     for line in output.split('\n'):
         draw.text((20, y), line, font=font, fill=text_color)
         y += font_size + 4
-         
+
+    image.save(file_path)
+    print(f"Screemshot saved to {file_path}") 
     
