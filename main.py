@@ -12,3 +12,7 @@ def generate_screenshot:
 
     image = Image.new("RGB", (width, height), background_color)
     draw = ImageDraw.Draw(image)
+
+    font = ImageFont.truetype(font_path, font_size)
+    bold_font = ImageFont.truetype(bold_font_path, font_size)
+    
