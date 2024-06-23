@@ -1,5 +1,5 @@
 from PIL import Image, ImageDraw, ImageFont
-def generate_screenshot:
+def generate_screenshot(username, hostname, folder, command, output, file_path):
     width = 800
     height = 600
     background_color = (58, 12, 43)
