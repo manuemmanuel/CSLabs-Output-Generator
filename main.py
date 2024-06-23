@@ -23,5 +23,11 @@ def generate_screenshot(username, hostname, folder, command, output, file_path):
         (folder, symbol_color, font),
         ("$", text_color, font),
         (f"{command}", text_color, font)
-
     ]
+
+    y = 20
+    x = 20
+    for text, color, font_type in prompt_parts:
+        draw.text((x,y), text, font=font_type, fill=color)
+        x += draw.textbbox((0, 0), text, font=font_type)[2]
+    
