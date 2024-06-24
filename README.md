@@ -39,4 +39,7 @@ Click on "Generate Screenshot" to create a terminal screenshot.
 The screenshot will be displayed in the Streamlit app interface.
 Use the "Download Image" button to download the generated screenshot.
 
+## Example Output
+
+![Example]()
 
