@@ -2,12 +2,7 @@
 
 This Streamlit application allows you to generate screenshots resembling terminal outputs, which can be useful for sharing code outputs or simulations from Ubuntu environments.
 
-## Example
-<video width="640" height="360" controls>
-  <source src="examples/example.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
+## Install Locally
 ## Prerequisites
 
 - Python 3.x installed on your machine.
@@ -16,6 +11,19 @@ This Streamlit application allows you to generate screenshots resembling termina
 ## Installation
 
 1. Clone the repository:
+
    ```bash
-   git clone <repository-url>
-   cd <repository-directory>
+   git clone https://github.com/manuemmanuel/CSLabs-Output-Generator.git
+   cd CSLabs-Output-Generator
+2. Install dependencies:
+ 
+   ```bash
+   pip install -r requirements.txt
+   ```
+   
+## Usage
+Run the Streamlit app:
+```bash
+streamlit run main.py
+```
+
