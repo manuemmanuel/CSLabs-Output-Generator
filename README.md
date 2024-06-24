@@ -22,8 +22,19 @@ This Streamlit application allows you to generate screenshots resembling termina
    ```
    
 ## Usage
-Run the Streamlit app:
+1. Run the Streamlit app:
 ```bash
 streamlit run main.py
 ```
+2. In the Streamlit app interface:
+Enter your desired username, hostname, and folder path.
+Input the commands you want to simulate in the terminal.
+Optionally, provide the output of those commands.
+Click on "Generate Screenshot" to create a terminal screenshot.
+
+3. View and download the generated screenshot:
+
+The screenshot will be displayed in the Streamlit app interface.
+Use the "Download Image" button to download the generated screenshot.
+
 
