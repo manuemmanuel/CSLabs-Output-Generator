@@ -4,13 +4,12 @@ This Streamlit application allows you to generate screenshots resembling termina
 
 [![Watch the video](https://github.com/manuemmanuel/CSLabs-Output-Generator/blob/main/examples/screenshot.jpeg)](https://github.com/manuemmanuel/CSLabs-Output-Generator/blob/main/examples/example.mp4)
 
-## Install Locally
 ## Prerequisites
 
 - Python 3.x installed on your machine.
 - Pip package manager installed.
 
-## Installation
+## Installation (Local)
 
 1. Clone the repository:
 
@@ -41,5 +40,5 @@ Use the "Download Image" button to download the generated screenshot.
 
 ## Example Output
 
-![Example]()
+![Example](https://github.com/manuemmanuel/CSLabs-Output-Generator/blob/main/examples/terminal_screenshot.png)
 
