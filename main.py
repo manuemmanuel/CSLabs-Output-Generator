@@ -135,7 +135,7 @@ def main():
                 st.session_state.outputs.pop()
                 st.experimental_rerun()
     with col3:
-        if st.button("Generate"):
+        if st.button("Generate Image"):
             file_path = "terminal_screenshot.png"
             image = generate_screenshot(username, hostname, folder, commands, outputs, file_path)
             
