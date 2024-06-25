@@ -2,7 +2,7 @@
 
 This Streamlit application allows you to generate screenshots resembling terminal outputs, which can be useful for sharing code outputs or simulations from Ubuntu environments. [Live Demo](https://ubuntu-terminal-output-generator.streamlit.app/)
 
-![Watch the video](https://github.com/manuemmanuel/CSLabs-Output-Generator/blob/main/examples/screenshot.jpeg)
+![Watch the video](https://github.com/manuemmanuel/CSLabs-Output-Generator/blob/main/examples/Terminal%20Screenshot%20generator.png)
 
 ## Prerequisites
 
