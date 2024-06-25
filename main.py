@@ -124,12 +124,12 @@ def main():
     st.write('')
     col1,col5, col2, col4,col6, col3 = st.columns([0.1,0.1,0.1, 1.9,1,0.9])
     with col1:
-        if st.button("➕"):
+        if st.button("Add command"):
             st.session_state.commands.append("")
             st.session_state.outputs.append("")
             st.experimental_rerun()
     with col2:
-        if st.button("➖"):
+        if st.button("Delete command"):
             if st.session_state.commands:
                 st.session_state.commands.pop()
                 st.session_state.outputs.pop()
