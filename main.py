@@ -122,7 +122,7 @@ def main():
         outputs.append(st.text_area(f"Output {i + 1}", value=st.session_state.outputs[i], key=f"output_{i + 1}"))
     
     st.write('')
-    col1,col5, col2, col4,col6, col3 = st.columns([1,0.1,1, 1.9,1,0.9])
+    col1,col5, col2, col4,col6, col3 = st.columns([1,0.1,1, 1.9,1,1])
     with col1:
         if st.button("Add command"):
             st.session_state.commands.append("")
