@@ -52,7 +52,7 @@ def main():
         st.markdown("""
         ### Terminal Screenshot Generator Guide
 
-        The Terminal Screenshot Generator is a simple and intuitive Streamlit-based web application that allows you to create terminal screenshots with customized commands and outputs. This guide will walk you through the steps to use the application effectively.
+        The Terminal Screenshot Generator is a simple Streamlit-based web application that allows you to create terminal screenshots with customized commands and outputs. This guide will walk you through the steps to use the application effectively.
 
         #### Getting Started
         1. **Access the Application**: Open the application in your web browser. You should see the title "Terminal Screenshot Generator" at the top.
@@ -69,11 +69,11 @@ def main():
             - **Outputs**: For each command, you can specify the output in the corresponding "Output 1", "Output 2", etc., text areas. If there is no output for a command, you can leave the output text area blank.
 
         3. **Manage Commands**:
-            - **Add Command**: Click the "Add Command" button to add a new command input field along with its corresponding output text area. The interface will update immediately to reflect the new input fields.
-            - **Delete Last Command**: Click the "Delete Last Command" button to remove the last command and its associated output text area. The interface will update immediately to reflect the removal.
+            - **Add Command**: Click the "Add Command (+)" button to add a new command input field along with its corresponding output text area. The interface will update immediately to reflect the new input fields.
+            - **Delete Command**: Click the "Delete Command (-)" button to remove the last command and its associated output text area. The interface will update immediately to reflect the removal.
 
         4. **Generate Screenshot**:
-            - Once you have entered all the commands and their outputs, click the "Generate Screenshot" button. This will create a terminal screenshot based on the provided details.
+            - Once you have entered all the commands and their outputs, click the "Generate Image" button. This will create a terminal screenshot based on the provided details.
             - The generated screenshot will be displayed below the button with the caption "Generated Terminal Screenshot".
 
         5. **Download the Screenshot**:
@@ -96,10 +96,10 @@ def main():
         2. Enter `my-computer` in the Hostname field.
         3. Enter `~/projects` in the Folder field.
         4. Enter `gcc main.c` in the "Command 1" field and leave the "Output 1" field blank.
-        5. Click "Add Command" to create a new command field.
+        5. Click "Add Command (+)" to create a new command field.
         6. Enter `./a.out` in the "Command 2" field.
         7. Enter `Hello, World!` in the "Output 2" field.
-        8. Click the "Generate Screenshot" button to create the screenshot.
+        8. Click the "Generate Image" button to create the screenshot.
         9. View the generated screenshot displayed on the page.
         10. Click the "Download Image" button to save the screenshot to your computer.
 
@@ -120,33 +120,34 @@ def main():
     for i in range(len(st.session_state.commands)):
         commands.append(st.text_input(f"Command {i + 1}", value=st.session_state.commands[i], key=f"command_{i + 1}"))
         outputs.append(st.text_area(f"Output {i + 1}", value=st.session_state.outputs[i], key=f"output_{i + 1}"))
-      
-    col1, col2 = st.columns([1, 1])
+    
+    st.write('')
+    col1,col5, col2, col4,col6, col3 = st.columns([0.1,0.1,0.1, 1.9,1,0.9])
     with col1:
-        if st.button("Add Command"):
+        if st.button("➕"):
             st.session_state.commands.append("")
             st.session_state.outputs.append("")
             st.experimental_rerun()
     with col2:
-        if st.button("Delete Last Command"):
+        if st.button("➖"):
             if st.session_state.commands:
                 st.session_state.commands.pop()
                 st.session_state.outputs.pop()
                 st.experimental_rerun()
-    
-    if st.button("Generate Screenshot"):
-        file_path = "terminal_screenshot.png"
-        image = generate_screenshot(username, hostname, folder, commands, outputs, file_path)
-        
-        st.image(image, caption='Generated Terminal Screenshot')
+    with col3:
+        if st.button("Generate Image"):
+            file_path = "terminal_screenshot.png"
+            image = generate_screenshot(username, hostname, folder, commands, outputs, file_path)
+            
+            st.image(image, caption='Generated Terminal Screenshot')
 
-        with open(file_path, "rb") as file:
-            st.download_button(
-                label="Download Image",
-                data=file,
-                file_name="terminal_screenshot.png",
-                mime="image/png"
-            )
+            with open(file_path, "rb") as file:
+                st.download_button(
+                    label="Download Image",
+                    data=file,
+                    file_name="terminal_screenshot.png",
+                    mime="image/png"
+                )
 
 if __name__ == "__main__":
     main()
