@@ -42,5 +42,10 @@ Use the "Download Image" button to download the generated screenshot.
 
 ![Example](https://github.com/manuemmanuel/CSLabs-Output-Generator/blob/main/examples/terminal_screenshot.png)
 
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
 ## License
-This project is licensed under [MIT](https://github.com/manuemmanuel/CSLabs-Output-Generator/blob/main/LICENSE).
+
+This project is open source and available under the [MIT License](LICENSE).
