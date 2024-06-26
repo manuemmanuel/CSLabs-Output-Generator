@@ -104,7 +104,7 @@ def main():
         - **Username**: Enter your desired username in the "Username" input box (default is `csea2`).
         - **Hostname**: Enter the hostname for your terminal in the "Hostname" input box (default is `sjcet-H81M-DS2`).
         - **Folder**: Specify the current working directory or folder in the "Folder" input box (default is `~/Documents`).
-        - **Image file name**: Enter the desired file name for the generated image in the "Image file name" input box (default is `terminal_screenshot`).
+        - **Image file name**: Enter the desired file name for the generated image in the "Image file name" input box (default is `filename`).
 
         2. **Add Commands and Outputs**:
 
