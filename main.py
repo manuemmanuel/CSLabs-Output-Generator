@@ -2,7 +2,6 @@ import streamlit as st
 from PIL import Image, ImageDraw, ImageFont
 from typing import List
 
-# Configuration
 WIDTH = 800
 BACKGROUND_COLOR = (58, 12, 43)
 TEXT_COLOR = (255, 255, 255)
@@ -15,7 +14,7 @@ LINE_PADDING = 4
 SIDE_PADDING = 20
 
 def calculate_height(commands: List[str], outputs: List[str], font_size: int, padding: int) -> int:
-    total_lines = len(commands) + 1  # +1 for the final prompt
+    total_lines = len(commands) + 1 
     for output in outputs:
         total_lines += output.count('\n') + 1 
     
@@ -24,7 +23,6 @@ def calculate_height(commands: List[str], outputs: List[str], font_size: int, pa
 
 @st.cache_data
 def generate_screenshot(username: str, hostname: str, folder: str, commands: List[str], outputs: List[str], file_path: str) -> Image.Image:
-    # Create a temporary image to calculate text dimensions
     temp_image = Image.new("RGB", (1, 1))
     temp_draw = ImageDraw.Draw(temp_image)
     
@@ -35,11 +33,9 @@ def generate_screenshot(username: str, hostname: str, folder: str, commands: Lis
         st.error("Error loading fonts. Please check if the font files exist.")
         return None
 
-    # Calculate the width of the prompt
     prompt = f"{username}@{hostname}:{folder}$ "
     prompt_width = temp_draw.textbbox((0, 0), prompt, font=bold_font)[2]
 
-    # Calculate the maximum width of commands and outputs
     max_content_width = max([
         temp_draw.textbbox((0, 0), cmd, font=font)[2] for cmd in commands
     ] + [
@@ -47,13 +43,10 @@ def generate_screenshot(username: str, hostname: str, folder: str, commands: Lis
         for output in outputs
     ])
 
-    # Calculate the total width
     total_width = max(WIDTH, prompt_width + max_content_width + 2 * SIDE_PADDING)
 
-    # Calculate the total height
     total_height = calculate_height(commands, outputs, FONT_SIZE, LINE_PADDING)
 
-    # Create the actual image
     image = Image.new("RGB", (total_width, total_height), BACKGROUND_COLOR)
     draw = ImageDraw.Draw(image)
 
@@ -80,7 +73,6 @@ def generate_screenshot(username: str, hostname: str, folder: str, commands: Lis
                 draw.text((SIDE_PADDING, y), line, font=font, fill=TEXT_COLOR)
                 y += FONT_SIZE + LINE_PADDING
     
-    # Draw final prompt
     draw_prompt(x, y, command=None)
 
     try:
