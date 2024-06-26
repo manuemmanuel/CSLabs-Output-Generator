@@ -1,48 +1,72 @@
 import streamlit as st
 from PIL import Image, ImageDraw, ImageFont
+from typing import List
 
-def generate_screenshot(username, hostname, folder, commands, outputs, file_path):
-    width, height = 800, 600
-    background_color = (58, 12, 43)
-    text_color = (255, 255, 255)
-    username_color = (63, 116, 98)
-    symbol_color = (55, 59, 105)
-    font_path = "fonts/UbuntuMono-R.ttf"
-    bold_font_path = "fonts/UbuntuMono-B.ttf"
-    font_size = 20
+WIDTH = 800
+MIN_HEIGHT = 600
+BACKGROUND_COLOR = (58, 12, 43)
+TEXT_COLOR = (255, 255, 255)
+USERNAME_COLOR = (63, 116, 98)
+SYMBOL_COLOR = (55, 59, 105)
+FONT_PATH = "fonts/UbuntuMono-R.ttf"
+BOLD_FONT_PATH = "fonts/UbuntuMono-B.ttf"
+FONT_SIZE = 20
+LINE_PADDING = 4
+SIDE_PADDING = 20
 
-    image = Image.new("RGB", (width, height), background_color)
+def calculate_height(commands: List[str], outputs: List[str], font_size: int, padding: int) -> int:
+    total_lines = len(commands)
+    for output in outputs:
+        total_lines += output.count('\n') + 1 
+    
+    height = (total_lines * (font_size + padding)) + (2 * padding) 
+    return max(height, MIN_HEIGHT) 
+
+@st.cache_data
+def generate_screenshot(username: str, hostname: str, folder: str, commands: List[str], outputs: List[str], file_path: str) -> Image.Image:
+    height = calculate_height(commands, outputs, FONT_SIZE, LINE_PADDING)
+
+    image = Image.new("RGB", (WIDTH, height), BACKGROUND_COLOR)
     draw = ImageDraw.Draw(image)
     
-    font = ImageFont.truetype(font_path, font_size)
-    bold_font = ImageFont.truetype(bold_font_path, font_size)
-    
-    def draw_prompt(x, y, command=None):
+    try:
+        font = ImageFont.truetype(FONT_PATH, FONT_SIZE)
+        bold_font = ImageFont.truetype(BOLD_FONT_PATH, FONT_SIZE)
+    except IOError:
+        st.error("Error loading fonts. Please check if the font files exist.")
+        return None
+
+    def draw_prompt(x: int, y: int, command: str = None) -> int:
         parts = [
-            (f"{username}@{hostname}", username_color, bold_font),
-            (":", text_color, font),
-            (folder, symbol_color, font),
-            ("$", text_color, font)
+            (f"{username}@{hostname}", USERNAME_COLOR, bold_font),
+            (":", TEXT_COLOR, font),
+            (folder, SYMBOL_COLOR, font),
+            ("$", TEXT_COLOR, font)
         ]
         if command:
-            parts.append((f" {command}", text_color, font))
+            parts.append((f" {command}", TEXT_COLOR, font))
         for text, color, font_type in parts:
             draw.text((x, y), text, font=font_type, fill=color)
             x += draw.textbbox((0, 0), text, font=font_type)[2]
-        return y + font_size + 4
+        return y + FONT_SIZE + LINE_PADDING
 
-    y = 20
-    x = 20
+    y = SIDE_PADDING
+    x = SIDE_PADDING
     for command, output in zip(commands, outputs):
         y = draw_prompt(x, y, command=command)
         if output.strip():
             for line in output.split('\n'):
-                draw.text((20, y), line, font=font, fill=text_color)
-                y += font_size + 4
+                draw.text((SIDE_PADDING, y), line, font=font, fill=TEXT_COLOR)
+                y += FONT_SIZE + LINE_PADDING
     
     y = draw_prompt(x, y, command=None)
 
-    image.save(file_path)
+    try:
+        image.save(file_path)
+    except IOError:
+        st.error("Error saving the image. Please check file permissions.")
+        return None
+
     return image
 
 def main():
@@ -51,7 +75,6 @@ def main():
     with st.expander("How to Use This Application"):
         st.markdown("""
         ### Terminal Screenshot Generator Guide
-
         The Terminal Screenshot Generator is a simple Streamlit-based web application that allows you to create terminal screenshots with customized commands and outputs. This guide will walk you through the steps to use the application effectively.
 
         #### Getting Started
@@ -69,8 +92,8 @@ def main():
             - **Outputs**: For each command, you can specify the output in the corresponding "Output 1", "Output 2", etc., text areas. If there is no output for a command, you can leave the output text area blank.
 
         3. **Manage Commands**:
-            - **Add Command**: Click the "Add Command (+)" button to add a new command input field along with its corresponding output text area. The interface will update immediately to reflect the new input fields.
-            - **Delete Command**: Click the "Delete Command (-)" button to remove the last command and its associated output text area. The interface will update immediately to reflect the removal.
+            - **Add Command**: Click the "Add Command" button to add a new command input field along with its corresponding output text area. The interface will update immediately to reflect the new input fields.
+            - **Delete Command**: Click the "Delete Command" button to remove the last command and its associated output text area. The interface will update immediately to reflect the removal.
 
         4. **Generate Screenshot**:
             - Once you have entered all the commands and their outputs, click the "Generate Image" button. This will create a terminal screenshot based on the provided details.
@@ -96,58 +119,55 @@ def main():
         2. Enter `my-computer` in the Hostname field.
         3. Enter `~/projects` in the Folder field.
         4. Enter `gcc main.c` in the "Command 1" field and leave the "Output 1" field blank.
-        5. Click "Add Command (+)" to create a new command field.
+        5. Click "Add Command" to create a new command field.
         6. Enter `./a.out` in the "Command 2" field.
         7. Enter `Hello, World!` in the "Output 2" field.
         8. Click the "Generate Image" button to create the screenshot.
         9. View the generated screenshot displayed on the page.
         10. Click the "Download Image" button to save the screenshot to your computer.
-
-        #### Notes
-        - The screenshot size is fixed at 800x600 pixels. If your commands and outputs are too long, they may not fit within the image. Adjust the content accordingly.
         """)
 
-    if "commands" not in st.session_state:
-        st.session_state.commands = [""]
-        st.session_state.outputs = [""]
+    if "terminal_data" not in st.session_state:
+        st.session_state.terminal_data = [{"command": "", "output": ""}]
 
     username = st.text_input("Username", value="csea2")
     hostname = st.text_input("Hostname", value="sjcet-H81M-DS2")
     folder = st.text_input("Folder", value="~/Documents")
-    
-    commands = []
-    outputs = []
-    for i in range(len(st.session_state.commands)):
-        commands.append(st.text_input(f"Command {i + 1}", value=st.session_state.commands[i], key=f"command_{i + 1}"))
-        outputs.append(st.text_area(f"Output {i + 1}", value=st.session_state.outputs[i], key=f"output_{i + 1}"))
+
+    for i, data in enumerate(st.session_state.terminal_data):
+        command = st.text_input(f"Command {i + 1}", value=data["command"], key=f"command_{i + 1}")
+        output = st.text_area(f"Output {i + 1}", value=data["output"], key=f"output_{i + 1}")
+        st.session_state.terminal_data[i] = {"command": command, "output": output}
     
     st.write('')
-    col1,col5, col2, col4,col6, col3 = st.columns([1,0.1,1, 1.9,1,1])
+    col1, col2, col3 = st.columns([1, 1, 1])
     with col1:
         if st.button("Add command"):
-            st.session_state.commands.append("")
-            st.session_state.outputs.append("")
+            st.session_state.terminal_data.append({"command": "", "output": ""})
             st.experimental_rerun()
     with col2:
         if st.button("Delete command"):
-            if st.session_state.commands:
-                st.session_state.commands.pop()
-                st.session_state.outputs.pop()
+            if len(st.session_state.terminal_data) > 1:
+                st.session_state.terminal_data.pop()
                 st.experimental_rerun()
     with col3:
         if st.button("Generate Image"):
+            commands = [data["command"] for data in st.session_state.terminal_data]
+            outputs = [data["output"] for data in st.session_state.terminal_data]
+            
             file_path = "terminal_screenshot.png"
             image = generate_screenshot(username, hostname, folder, commands, outputs, file_path)
             
-            st.image(image, caption='Generated Terminal Screenshot')
+            if image:
+                st.image(image, caption='Generated Terminal Screenshot', use_column_width=True)
 
-            with open(file_path, "rb") as file:
-                st.download_button(
-                    label="Download Image",
-                    data=file,
-                    file_name="terminal_screenshot.png",
-                    mime="image/png"
-                )
+                with open(file_path, "rb") as file:
+                    st.download_button(
+                        label="Download Image",
+                        data=file,
+                        file_name="terminal_screenshot.png",
+                        mime="image/png"
+                    )
 
 if __name__ == "__main__":
     main()
