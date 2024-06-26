@@ -2,8 +2,8 @@ import streamlit as st
 from PIL import Image, ImageDraw, ImageFont
 from typing import List
 
+# Configuration
 WIDTH = 800
-MIN_HEIGHT = 600
 BACKGROUND_COLOR = (58, 12, 43)
 TEXT_COLOR = (255, 255, 255)
 USERNAME_COLOR = (63, 116, 98)
@@ -15,19 +15,18 @@ LINE_PADDING = 4
 SIDE_PADDING = 20
 
 def calculate_height(commands: List[str], outputs: List[str], font_size: int, padding: int) -> int:
-    total_lines = len(commands)
+    total_lines = len(commands) + 1  # +1 for the final prompt
     for output in outputs:
         total_lines += output.count('\n') + 1 
     
     height = (total_lines * (font_size + padding)) + (2 * padding) 
-    return max(height, MIN_HEIGHT) 
+    return height
 
 @st.cache_data
 def generate_screenshot(username: str, hostname: str, folder: str, commands: List[str], outputs: List[str], file_path: str) -> Image.Image:
-    height = calculate_height(commands, outputs, FONT_SIZE, LINE_PADDING)
-
-    image = Image.new("RGB", (WIDTH, height), BACKGROUND_COLOR)
-    draw = ImageDraw.Draw(image)
+    # Create a temporary image to calculate text dimensions
+    temp_image = Image.new("RGB", (1, 1))
+    temp_draw = ImageDraw.Draw(temp_image)
     
     try:
         font = ImageFont.truetype(FONT_PATH, FONT_SIZE)
@@ -35,6 +34,28 @@ def generate_screenshot(username: str, hostname: str, folder: str, commands: Lis
     except IOError:
         st.error("Error loading fonts. Please check if the font files exist.")
         return None
+
+    # Calculate the width of the prompt
+    prompt = f"{username}@{hostname}:{folder}$ "
+    prompt_width = temp_draw.textbbox((0, 0), prompt, font=bold_font)[2]
+
+    # Calculate the maximum width of commands and outputs
+    max_content_width = max([
+        temp_draw.textbbox((0, 0), cmd, font=font)[2] for cmd in commands
+    ] + [
+        max([temp_draw.textbbox((0, 0), line, font=font)[2] for line in output.split('\n')])
+        for output in outputs
+    ])
+
+    # Calculate the total width
+    total_width = max(WIDTH, prompt_width + max_content_width + 2 * SIDE_PADDING)
+
+    # Calculate the total height
+    total_height = calculate_height(commands, outputs, FONT_SIZE, LINE_PADDING)
+
+    # Create the actual image
+    image = Image.new("RGB", (total_width, total_height), BACKGROUND_COLOR)
+    draw = ImageDraw.Draw(image)
 
     def draw_prompt(x: int, y: int, command: str = None) -> int:
         parts = [
@@ -59,7 +80,8 @@ def generate_screenshot(username: str, hostname: str, folder: str, commands: Lis
                 draw.text((SIDE_PADDING, y), line, font=font, fill=TEXT_COLOR)
                 y += FONT_SIZE + LINE_PADDING
     
-    y = draw_prompt(x, y, command=None)
+    # Draw final prompt
+    draw_prompt(x, y, command=None)
 
     try:
         image.save(file_path)
