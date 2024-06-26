@@ -147,6 +147,7 @@ def main():
     username = st.text_input("Username", value="csea2")
     hostname = st.text_input("Hostname", value="sjcet-H81M-DS2")
     folder = st.text_input("Folder", value="~/Documents")
+    file_name = st.text_input("Image file name", value="filename")
 
     for i, data in enumerate(st.session_state.terminal_data):
         command = st.text_input(f"Command {i + 1}", value=data["command"], key=f"command_{i + 1}")
@@ -169,7 +170,7 @@ def main():
             commands = [data["command"] for data in st.session_state.terminal_data]
             outputs = [data["output"] for data in st.session_state.terminal_data]
             
-            file_path = "terminal_screenshot.png"
+            file_path = f"{file_name}.png"
             image = generate_screenshot(username, hostname, folder, commands, outputs, file_path)
             
             if image:
@@ -179,7 +180,7 @@ def main():
                     st.download_button(
                         label="Download Image",
                         data=file,
-                        file_name="terminal_screenshot.png",
+                        file_name=f"{file_name}.png",
                         mime="image/png"
                     )
 
