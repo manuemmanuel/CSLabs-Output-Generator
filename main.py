@@ -105,6 +105,7 @@ def main():
         - **Hostname**: Enter the hostname for your terminal in the "Hostname" input box (default is `sjcet-H81M-DS2`).
         - **Folder**: Specify the current working directory or folder in the "Folder" input box (default is `~/Documents`).
         - **Image file name**: Enter the desired file name for the generated image in the "Image file name" input box (default is `filename`).
+        - **Image file format**: Select the desired file format for the generated image from the dropdown menu.
 
         2. **Add Commands and Outputs**:
 
@@ -122,7 +123,7 @@ def main():
         - The generated screenshot will be displayed below the button with the caption "Generated Terminal Screenshot".
 
         5. **Download the Screenshot**:
-        - To download the generated screenshot, click the "Download Image" button. This will download the image with the file name you specified.
+        - To download the generated screenshot, click the "Download Image" button. This will download the image with the file name and format you specified.
 
         #### Example Usage
 
@@ -132,6 +133,7 @@ def main():
         2. **Hostname**: `my-computer`
         3. **Folder**: `~/projects`
         4. **Image file name**: `my_terminal_screenshot`
+        5. **Image file format**: `png`
 
         **Commands and Outputs**:
 
@@ -146,13 +148,14 @@ def main():
         2. Enter `my-computer` in the Hostname field.
         3. Enter `~/projects` in the Folder field.
         4. Enter `my_terminal_screenshot` in the Image file name field.
-        5. Enter `gcc main.c` in the "Command 1" field and leave the "Output 1" field blank.
-        6. Click "Add Command" to create a new command field.
-        7. Enter `./a.out` in the "Command 2" field.
-        8. Enter `Hello, World!` in the "Output 2" field.
-        9. Click the "Generate Image" button to create the screenshot.
-        10. View the generated screenshot displayed on the page.
-        11. Click the "Download Image" button to save the screenshot to your computer.
+        5. Select `png` from the Image file format dropdown menu.
+        6. Enter `gcc main.c` in the "Command 1" field and leave the "Output 1" field blank.
+        7. Click "Add Command" to create a new command field.
+        8. Enter `./a.out` in the "Command 2" field.
+        9. Enter `Hello, World!` in the "Output 2" field.
+        10. Click the "Generate Image" button to create the screenshot.
+        11. View the generated screenshot displayed on the page.
+        12. Click the "Download Image" button to save the screenshot to your computer.
 
         """)
 
@@ -163,6 +166,7 @@ def main():
     hostname = st.text_input("Hostname", value="sjcet-H81M-DS2")
     folder = st.text_input("Folder", value="~/Documents")
     file_name = st.text_input("Image file name", value="filename")
+    file_format = st.selectbox("Image file format", options=["png", "jpg", "jpeg", "svg", "webp"])
 
     for i, data in enumerate(st.session_state.terminal_data):
         command = st.text_input(f"Command {i + 1}", value=data["command"], key=f"command_{i + 1}")
@@ -185,7 +189,7 @@ def main():
             commands = [data["command"] for data in st.session_state.terminal_data]
             outputs = [data["output"] for data in st.session_state.terminal_data]
             
-            file_path = f"{file_name}.png"
+            file_path = f"{file_name}.{file_format}"
             image = generate_screenshot(username, hostname, folder, commands, outputs, file_path)
             
             if image:
@@ -195,8 +199,8 @@ def main():
                     st.download_button(
                         label="Download Image",
                         data=file,
-                        file_name=f"{file_name}.png",
-                        mime="image/png"
+                        file_name=f"{file_name}.{file_format}",
+                        mime=f"image/{file_format}"
                     )
 
 if __name__ == "__main__":
