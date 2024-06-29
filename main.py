@@ -175,9 +175,9 @@ def main():
     file_format = st.selectbox("Image file format", options=["png", "jpg", "jpeg", "svg", "webp"])
 
     for i, data in enumerate(st.session_state.terminal_data):
-        command = st.text_input(f"Command {i + 1}", value=data["command"], key=f"command_{i + 1}")
-        output = st.text_area(f"Output {i + 1}", value=data["output"], key=f"output_{i + 1}")
-        color = st.selectbox(f"Output Color {i + 1}", options=["White", "Blue", "Green"], index=["White", "Blue", "Green"].index(data["color"]), key=f"color_{i + 1}")
+        command = st.text_input(f"Command {i + 1}", value=data.get("command", ""), key=f"command_{i + 1}")
+        output = st.text_area(f"Output {i + 1}", value=data.get("output", ""), key=f"output_{i + 1}")
+        color = st.selectbox(f"Output Color {i + 1}", options=["White", "Blue", "Green"], index=["White", "Blue", "Green"].index(data.get("color", "White")), key=f"color_{i + 1}")
         st.session_state.terminal_data[i] = {"command": command, "output": output, "color": color}
     
     st.write('')
