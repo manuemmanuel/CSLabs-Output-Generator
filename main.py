@@ -13,6 +13,12 @@ FONT_SIZE = 20
 LINE_PADDING = 4
 SIDE_PADDING = 20
 
+COLOR_MAP = {
+    "White": (255, 255, 255),
+    "Blue": (55, 59, 105),
+    "Green": (63, 116, 98)
+}
+
 def calculate_height(commands: List[str], outputs: List[str], font_size: int, padding: int) -> int:
     total_lines = len(commands) + 1 
     for output in outputs:
@@ -22,7 +28,7 @@ def calculate_height(commands: List[str], outputs: List[str], font_size: int, pa
     return height
 
 @st.cache_data
-def generate_screenshot(username: str, hostname: str, folder: str, commands: List[str], outputs: List[str], file_path: str) -> Image.Image:
+def generate_screenshot(username: str, hostname: str, folder: str, commands: List[str], outputs: List[str], colors: List[str], file_path: str) -> Image.Image:
     temp_image = Image.new("RGB", (1, 1))
     temp_draw = ImageDraw.Draw(temp_image)
     
@@ -66,11 +72,11 @@ def generate_screenshot(username: str, hostname: str, folder: str, commands: Lis
 
     y = SIDE_PADDING
     x = SIDE_PADDING
-    for command, output in zip(commands, outputs):
+    for command, (output, color) in zip(commands, zip(outputs, colors)):
         y = draw_prompt(x, y, command=command)
         if output.strip():
             for line in output.split('\n'):
-                draw.text((SIDE_PADDING, y), line, font=font, fill=TEXT_COLOR)
+                draw.text((SIDE_PADDING, y), line, font=font, fill=COLOR_MAP[color])
                 y += FONT_SIZE + LINE_PADDING
     
     draw_prompt(x, y, command=None)
@@ -160,7 +166,7 @@ def main():
         """)
 
     if "terminal_data" not in st.session_state:
-        st.session_state.terminal_data = [{"command": "", "output": ""}]
+        st.session_state.terminal_data = [{"command": "", "output": "", "color": "White"}]
 
     username = st.text_input("Username", value="csea2")
     hostname = st.text_input("Hostname", value="sjcet-H81M-DS2")
@@ -171,13 +177,14 @@ def main():
     for i, data in enumerate(st.session_state.terminal_data):
         command = st.text_input(f"Command {i + 1}", value=data["command"], key=f"command_{i + 1}")
         output = st.text_area(f"Output {i + 1}", value=data["output"], key=f"output_{i + 1}")
-        st.session_state.terminal_data[i] = {"command": command, "output": output}
+        color = st.selectbox(f"Output Color {i + 1}", options=["White", "Blue", "Green"], index=["White", "Blue", "Green"].index(data["color"]), key=f"color_{i + 1}")
+        st.session_state.terminal_data[i] = {"command": command, "output": output, "color": color}
     
     st.write('')
     col1, col2, col3 = st.columns([1, 1, 1])
     with col1:
         if st.button("Add command"):
-            st.session_state.terminal_data.append({"command": "", "output": ""})
+            st.session_state.terminal_data.append({"command": "", "output": "", "color": "White"})
             st.experimental_rerun()
     with col2:
         if st.button("Delete command"):
@@ -188,9 +195,10 @@ def main():
         if st.button("Generate Image"):
             commands = [data["command"] for data in st.session_state.terminal_data]
             outputs = [data["output"] for data in st.session_state.terminal_data]
+            colors = [data["color"] for data in st.session_state.terminal_data]
             
             file_path = f"{file_name}.{file_format}"
-            image = generate_screenshot(username, hostname, folder, commands, outputs, file_path)
+            image = generate_screenshot(username, hostname, folder, commands, outputs, colors, file_path)
             
             if image:
                 st.image(image, caption='Generated Terminal Screenshot', use_column_width=True)
