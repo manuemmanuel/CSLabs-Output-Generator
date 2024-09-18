@@ -60,7 +60,7 @@ css = """
 """
 
 # Set page config to inject the CSS
-st.set_page_config(page_title="Terminal Screenshot Generator", page_icon="🖥️", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Terminal Screenshot Generator", page_icon="🖥️", initial_sidebar_state="expanded")
 
 # Inject CSS with markdown
 st.markdown(css, unsafe_allow_html=True)
