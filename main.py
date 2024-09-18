@@ -2,6 +2,17 @@ import streamlit as st
 from PIL import Image, ImageDraw, ImageFont
 from typing import List
 
+monospace_font_css = """
+<style>
+    body {
+        font-family: monospace !important;
+    }
+    .stTextInput > div > div > input, .stTextArea > div > div > textarea {
+        font-family: monospace !important;
+    }
+</style>
+"""
+
 WIDTH = 800
 BACKGROUND_COLOR = (58, 12, 43)
 TEXT_COLOR = (255, 255, 255)
