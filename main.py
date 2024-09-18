@@ -12,8 +12,13 @@ css = """
         font-family: 'Roboto Mono', monospace !important;
     }
 
+    /* Style for all text elements */
+    div, p, span, li, code, pre {
+        font-family: 'Roboto Mono', monospace !important;
+    }
+
     /* Style for input fields */
-    input, textarea, button, div[data-baseweb="select"] > div, div[data-baseweb="select"] span {
+    input, textarea {
         font-family: 'Roboto Mono', monospace !important;
     }
 
@@ -22,22 +27,33 @@ css = """
         font-family: 'Roboto Mono', monospace !important;
     }
 
-    /* Style for dropdown options */
-    div[data-baseweb="select"] ul {
+    /* Style for buttons */
+    button, .stButton>button, .stDownloadButton>button {
         font-family: 'Roboto Mono', monospace !important;
     }
 
-    /* Style for buttons */
-    button, .stButton>button {
+    /* Style for dropdown options */
+    .stSelectbox>div>div>select, div[data-baseweb="select"] > div, 
+    div[data-baseweb="select"] span, div[data-baseweb="select"] ul {
         font-family: 'Roboto Mono', monospace !important;
     }
 
     /* Additional styles to cover more Streamlit components */
-    .stTextInput>div>div>input, .stTextArea>div>div>textarea, .stSelectbox>div>div>select {
+    .stTextInput>div>div>input, .stTextArea>div>div>textarea {
         font-family: 'Roboto Mono', monospace !important;
     }
 
     .stMarkdown, .stText, .stCode {
+        font-family: 'Roboto Mono', monospace !important;
+    }
+
+    /* Style for radio buttons and checkboxes */
+    .stRadio label, .stCheckbox label {
+        font-family: 'Roboto Mono', monospace !important;
+    }
+
+    /* Ensure sidebar also uses monospace */
+    .sidebar .sidebar-content {
         font-family: 'Roboto Mono', monospace !important;
     }
 </style>
