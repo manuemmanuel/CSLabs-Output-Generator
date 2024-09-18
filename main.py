@@ -101,6 +101,7 @@ def generate_screenshot(username: str, hostname: str, folder: str, commands: Lis
     return image
 
 def main():
+    st.markdown(monospace_font_css, unsafe_allow_html=True)
     st.title("Terminal Screenshot Generator")
     
     with st.expander("How to Use This Application"):
