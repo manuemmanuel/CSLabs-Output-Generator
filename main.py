@@ -2,44 +2,19 @@ import streamlit as st
 from PIL import Image, ImageDraw, ImageFont
 from typing import List
 
-monospace_font_css = """
+css = """
 <style>
-    /* Main body font */
-    body {
-        font-family: monospace !important;
+    /* Import a monospace font */
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+
+    /* Apply the font to the entire app */
+    html, body, [class*="css"] {
+        font-family: 'Roboto Mono', monospace !important;
     }
-    
-    /* Streamlit Markdown */
-    .stMarkdown {
-        font-family: monospace !important;
-    }
-    
-    /* Streamlit inputs and text areas */
-    .stTextInput > div > div > input, 
-    .stTextArea > div > div > textarea,
-    .stSelectbox > div > div > select {
-        font-family: monospace !important;
-    }
-    
-    /* Streamlit buttons */
-    .stButton > button {
-        font-family: monospace !important;
-    }
-    
-    /* Streamlit radio buttons and checkboxes */
-    .stRadio > div,
-    .stCheckbox > label {
-        font-family: monospace !important;
-    }
-    
-    /* Streamlit dataframe */
-    .dataframe {
-        font-family: monospace !important;
-    }
-    
-    /* Streamlit slider */
-    .stSlider > div {
-        font-family: monospace !important;
+
+    /* Style for input fields */
+    input, textarea {
+        font-family: 'Roboto Mono', monospace !important;
     }
 </style>
 """
@@ -131,8 +106,12 @@ def generate_screenshot(username: str, hostname: str, folder: str, commands: Lis
 
     return image
 
+
+st.set_page_config(page_title="Terminal Screenshot Generator", page_icon="🖥️", layout="wide", initial_sidebar_state="expanded")
+
+# Inject CSS with markdown
+st.markdown(css, unsafe_allow_html=True)
 def main():
-    st.markdown(monospace_font_css, unsafe_allow_html=True)
     st.title("Terminal Screenshot Generator")
     
     with st.expander("How to Use This Application"):
