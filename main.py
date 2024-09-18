@@ -8,16 +8,46 @@ css = """
     @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
 
     /* Apply the font to the entire app */
-    html, body, [class*="css"] {
+    html, body, [class*="css"]  {
         font-family: 'Roboto Mono', monospace !important;
     }
 
     /* Style for input fields */
-    input, textarea {
+    input, textarea, button, div[data-baseweb="select"] > div, div[data-baseweb="select"] span {
+        font-family: 'Roboto Mono', monospace !important;
+    }
+
+    /* Style for titles and labels */
+    h1, h2, h3, h4, h5, h6, label, .stSelectbox label {
+        font-family: 'Roboto Mono', monospace !important;
+    }
+
+    /* Style for dropdown options */
+    div[data-baseweb="select"] ul {
+        font-family: 'Roboto Mono', monospace !important;
+    }
+
+    /* Style for buttons */
+    button, .stButton>button {
+        font-family: 'Roboto Mono', monospace !important;
+    }
+
+    /* Additional styles to cover more Streamlit components */
+    .stTextInput>div>div>input, .stTextArea>div>div>textarea, .stSelectbox>div>div>select {
+        font-family: 'Roboto Mono', monospace !important;
+    }
+
+    .stMarkdown, .stText, .stCode {
         font-family: 'Roboto Mono', monospace !important;
     }
 </style>
 """
+
+# Set page config to inject the CSS
+st.set_page_config(page_title="Terminal Screenshot Generator", page_icon="🖥️", layout="wide", initial_sidebar_state="expanded")
+
+# Inject CSS with markdown
+st.markdown(css, unsafe_allow_html=True)
 
 WIDTH = 800
 BACKGROUND_COLOR = (58, 12, 43)
@@ -107,10 +137,6 @@ def generate_screenshot(username: str, hostname: str, folder: str, commands: Lis
     return image
 
 
-st.set_page_config(page_title="Terminal Screenshot Generator", page_icon="🖥️", layout="wide", initial_sidebar_state="expanded")
-
-# Inject CSS with markdown
-st.markdown(css, unsafe_allow_html=True)
 def main():
     st.title("Terminal Screenshot Generator")
     
