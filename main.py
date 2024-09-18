@@ -164,8 +164,8 @@ def main():
 
         """)
 
-    if "terminal_data" not in st.session_state:
-        st.session_state.terminal_data = [{"command": "", "output": "", "color": "White"}]
+    if "num_commands" not in st.session_state:
+        st.session_state.num_commands = 1
 
     username = st.text_input("Username", value="csea2")
     hostname = st.text_input("Hostname", value="sjcet-H81M-DS2")
@@ -173,29 +173,31 @@ def main():
     file_name = st.text_input("Image file name", value="filename")
     file_format = st.selectbox("Image file format", options=["png", "jpg", "jpeg", "svg", "webp"])
 
-    for i, data in enumerate(st.session_state.terminal_data):
-        command = st.text_input(f"Command {i + 1}", value=data.get("command", ""), key=f"command_{i + 1}")
-        output = st.text_area(f"Output {i + 1}", value=data.get("output", ""), key=f"output_{i + 1}")
-        color = st.selectbox(f"Output Color {i + 1}", options=["White", "Blue", "Green"], index=["White", "Blue", "Green"].index(data.get("color", "White")), key=f"color_{i + 1}")
-        st.session_state.terminal_data[i] = {"command": command, "output": output, "color": color}
+    commands = []
+    outputs = []
+    colors = []
+
+    for i in range(st.session_state.num_commands):
+        command = st.text_input(f"Command {i + 1}", key=f"command_{i}")
+        output = st.text_area(f"Output {i + 1}", key=f"output_{i}")
+        color = st.selectbox(f"Output Color {i + 1}", options=["White", "Blue", "Green"], key=f"color_{i}")
+        
+        commands.append(command)
+        outputs.append(output)
+        colors.append(color)
     
     st.write('')
     col1, col2, col3 = st.columns([1, 1, 1])
     with col1:
         if st.button("Add command"):
-            st.session_state.terminal_data.append({"command": "", "output": "", "color": "White"})
-            st.experimental_rerun()
+            st.session_state.num_commands += 1
+            st.rerun()
     with col2:
-        if st.button("Delete command"):
-            if len(st.session_state.terminal_data) > 1:
-                st.session_state.terminal_data.pop()
-                st.experimental_rerun()
+        if st.button("Delete command") and st.session_state.num_commands > 1:
+            st.session_state.num_commands -= 1
+            st.rerun()
     with col3:
         if st.button("Generate Image"):
-            commands = [data["command"] for data in st.session_state.terminal_data]
-            outputs = [data["output"] for data in st.session_state.terminal_data]
-            colors = [data["color"] for data in st.session_state.terminal_data]
-            
             file_path = f"{file_name}.{file_format}"
             image = generate_screenshot(username, hostname, folder, commands, outputs, colors, file_path)
             
@@ -210,5 +212,4 @@ def main():
                         mime=f"image/{file_format}"
                     )
 
-if __name__ == "__main__":
-    main()
+main()
