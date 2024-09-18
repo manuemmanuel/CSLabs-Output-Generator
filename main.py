@@ -4,10 +4,41 @@ from typing import List
 
 monospace_font_css = """
 <style>
+    /* Main body font */
     body {
         font-family: monospace !important;
     }
-    .stTextInput > div > div > input, .stTextArea > div > div > textarea {
+    
+    /* Streamlit Markdown */
+    .stMarkdown {
+        font-family: monospace !important;
+    }
+    
+    /* Streamlit inputs and text areas */
+    .stTextInput > div > div > input, 
+    .stTextArea > div > div > textarea,
+    .stSelectbox > div > div > select {
+        font-family: monospace !important;
+    }
+    
+    /* Streamlit buttons */
+    .stButton > button {
+        font-family: monospace !important;
+    }
+    
+    /* Streamlit radio buttons and checkboxes */
+    .stRadio > div,
+    .stCheckbox > label {
+        font-family: monospace !important;
+    }
+    
+    /* Streamlit dataframe */
+    .dataframe {
+        font-family: monospace !important;
+    }
+    
+    /* Streamlit slider */
+    .stSlider > div {
         font-family: monospace !important;
     }
 </style>
